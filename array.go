@@ -1,125 +1,120 @@
-package main
-import( //импортирование 1 пакета: errors для создания и возврата ошибок
+package main 
+
+import (
 	"fmt"
-	"errors" 
 )
 
-//Массив
-type Array struct{
+//Массив 
+type Array struct {
 	data []string //хранение данных массива
-	length int //хранение текущей длины массива
 }
 
 //NewArray создаёт и возвращает новый пустой объект массива (создание нового пустого массива)
 func NewArray(size int) Array {
-	return Array{
-		data: make([]string, size),
+	return Array {
+		data: make([]string, size), 
 	}
 }
 
-//Append добавляет элемент в конец массива
-func (arr *Array) ArAdd(value string) string{
-	for i:=0; i<len(arr.data); i++{
-		if arr.data[i] == ""{
+//Сортировка подмассивов по их длине (сортировка вставками)
+func InsertionSortSubarrays(subarrays [][]string) {
+	for i := 1; i<len(subarrays); i++ {
+		key := subarrays[i]
+		j := i-1
+		for j>=0 && len(subarrays[j])>len(key) {
+			subarrays[j+1] = subarrays[j]
+			j--
+		}
+		subarrays[j+1] = key
+	}
+}
+
+
+//ArAdd добавляет элемент в конец массива
+func (arr *Array) ArAdd(value string) string {
+	for i := 0; i<len(arr.data); i++ {
+		if arr.data[i] == "" {
 			arr.data[i] = value
 			return ""
-		}
 	}
-	return "Error: array is full!"
+}
+return "Error: array is full!"
 }
 
-//Get возвращает элемент по индексу
-func (arr *Array) AGet(index int) (string, error){
-	if index<0 || index>= len(arr.data){
-		return "0", errors.New("Index out of range")
-}
-return arr.data[index], errors.New("")
+//AGet возвращает элемент по индексу 
+func (arr *Array) AGet(index int) (string, error) {
+	if index<0 || index>=len(arr.data) {
+		return "0", fmt.Errorf("Index out of range")
+	}
+	return arr.data[index], nil
 }
 
-//Set устанавливает значение элемента по индексу 
-func (arr *Array) ASet(index int, value string) error{
-	if index < 0|| index >= len(arr.data){
-		return errors.New("Index out of range")
+//ASet устанавливает значение элемента по индексу 
+func (arr *Array) ASet(index int, value string) error {
+	if index<0 || index>=len(arr.data) {
+		return fmt.Errorf("Index out of range")
 }
 arr.data[index] = value
 return nil
 }
 
-//Length возвращает текущую длину массива
-func (arr *Array) ALength() int{
-	return arr.length
+//ALength возвращает текущую длину массива
+func (arr *Array) ALength() int {
+	return len(arr.data)
 }
 
-//Нахождение элемента, удаление и смещение
-func (arr *Array) ADel(index int) string{
-	if index>=0 && index<len(arr.data){
-		for i:=index; i<len(arr.data)-1; i++{
-			arr.data[i]=arr.data[i+1]   //смещение
+//ADel нахождение элемента, удаление и смещение
+func (arr *Array) ADel(index int) string {
+	if index>=0 && index<len(arr.data) {
+		for i:=index; i<len(arr.data)-1; i++ {
+			arr.data[i]=arr.data[i+1] //смещение
 		}
-		arr.data[len(arr.data)-1]=""
+		arr.data[len(arr.data)-1] = ""
 		return ""
 	}
 	return "Error: Index out of range"
 }
 
-//Функция вывода
-func (arr Array) ArrPrint(){
-	for i:=0; i<len(arr.data); i++{
-		if arr.data[i]!=""{
-			fmt.Printf("%s ",arr.data[i])
+//Функция вывода 
+func (arr Array) ArrPrint() {
+	for i := 0; i<len(arr.data); i++ {
+		if arr.data[i] != "" {
+			fmt.Printf("%s ", arr.data[i])
 		}
-	} 
+	}
 }
 
-
-
-// SubArrays возвращает различные подмассивы массива
+//Функция SubArrays генерирует и возвращает все подмассивы массива
 func SubArrays(arr Array) [][]string {
-	subarrays := [][]string{{}} // Пустой подмассив всегда присутствует
-	for i := 1; i < (1 << uint(len(arr.data))); i++ {
+	subarrays := make([][]string, 0)
+
+	for i := 0; i < (1 << int(len(arr.data))); i++ {    //Эта строка использует uint для приведения длины массива к целому числу без знака и выполнения побитовых операций в цикле.
 		subarray := make([]string, 0)
 		for j, elem := range arr.data {
-			if (i & (1 << uint(j))) != 0 {
+			if (i & (1<<int(j))) != 0 {
 				subarray = append(subarray, elem)
 			}
 		}
-		// Проверка на уникальность подмассива
-		unique := true
-		for _, existing := range subarrays {
-			if equalSlices(existing, subarray) {
-				unique = false
-				break
-			}
-		}
-		if unique {
-			subarrays = append(subarrays, subarray)
-		}
+		subarrays = append(subarrays, subarray)
 	}
 	return subarrays
 }
 
-// Функция для проверки на равенство двух срезов
-func equalSlices(slice1, slice2 []string) bool {
-	if len(slice1) != len(slice2) {
-		return false
-	}
-	for i := range slice1 {
-		if slice1[i] != slice2[i] {
-			return false
-		}
-	}
-	return true
-}
 
 func main() {
-	set0 := NewArray(3)
-	set0.ArAdd("x")
-	set0.ArAdd("y")
-	set0.ArAdd("z")
+	//Создание нового массива и добавление элементов
+	array := NewArray(3)
+	array.ArAdd("x")
+	array.ArAdd("y")
+	array.ArAdd("z")
 
-	fmt.Println("All Subarrays:")
-	subarrays := SubArrays(set0)
+	//Генерация и сортировка подмассивов
+	subarrays := SubArrays(array)
+	InsertionSortSubarrays(subarrays)
+
+	//Вывод результатов
+	fmt.Println("AllSubarrays")
 	for _, subarray := range subarrays {
 		fmt.Printf("%v", subarray)
-	}
+}
 }

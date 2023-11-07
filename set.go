@@ -110,7 +110,26 @@ func main() {
 
 	// Получаем отсортированные элементы и выводим их
 
-	//Вывод сумм элементов в подмножествах set1 и set2
+	//Вывод подмножеств, сумм элементов в подмножествах set1 и set2 и разница сумм между set1 и set2 
+	fmt.Println("")
+	fmt.Println("set1:")
+    set1.SetPrint()
+	fmt.Println("")
+    fmt.Println("sum set1:", set1.Sum())
+	fmt.Println("")
+
+    fmt.Println("set2:")
+    set2.SetPrint()
+	fmt.Println("")
+    fmt.Println("sum set2:", set2.Sum())
+	fmt.Println("")
+
+    // Разница сумм между set1 и set2
+    difference := set1.Sum() - set2.Sum()
+    fmt.Println("Разница сумм:", difference)
+
+	/* !!!!!!
 	fmt.Println("sum set1", set1.Sum())
 	fmt.Println("sum set2", set2.Sum())
+	*/
 }

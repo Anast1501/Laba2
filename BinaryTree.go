@@ -157,6 +157,7 @@ func main() {
 
 
 
+//К-тая максимальная сумма (вариант 5)
 package main
 
 import (

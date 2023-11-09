@@ -1,3 +1,4 @@
+//Обратная польская запись (вариант 2)
 package main
 
 import (
@@ -141,7 +142,8 @@ func performOperation(operator string, operand1 int, operand2 int) int {
 }
 
 func main() {
-	expression := "6 4 8 * +"
+	expression := "6 4 8 * +" //обратная польская запись
+	//expression := "17 9 2 * +" //обратная польская запись
 	result, err := evaluateRPN(expression)
 	if err != nil {
 		fmt.Println("Error:", err)

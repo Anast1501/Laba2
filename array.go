@@ -1,4 +1,8 @@
 //Различные подмассивы (вариант 3)
+
+//Необходимо реализовать алгоритм, который выводит все различные
+//подмассивы массива.
+
 package main 
 
 import (
@@ -18,11 +22,11 @@ func NewArray(size int) Array {
 }
 
 //Сортировка подмассивов по их длине (сортировка вставками)
-func InsertionSortSubarrays(subarrays [][]string) {
+func InsertionSortSubarrays(subarrays [][]string) { //отсортировка подмассивов по длине в порядке возрастания
 	for i := 1; i<len(subarrays); i++ {
-		key := subarrays[i]
+		key := subarrays[i] //текущий подмассив
 		j := i-1
-		for j>=0 && len(subarrays[j])>len(key) {
+		for j>=0 && len(subarrays[j])>len(key) { //сравнение длины подмассивов и производим сдвиг элементов, чтоб вставить key на правильное место
 			subarrays[j+1] = subarrays[j]
 			j--
 		}
@@ -87,13 +91,13 @@ func (arr Array) ArrPrint() {
 
 //Функция SubArrays генерирует и возвращает все подмассивы массива
 func SubArrays(arr Array) [][]string {
-	subarrays := make([][]string, 0)
+	subarrays := make([][]string, 0) //создание пустого среза срезов строк для хранения подмассивов
 
-	for i := 0; i < (1 << int(len(arr.data))); i++ {    //Эта строка использует uint для приведения длины массива к целому числу без знака и выполнения побитовых операций в цикле.
-		subarray := make([]string, 0)
-		for j, elem := range arr.data {
+	for i := 0; i < (1 << int(len(arr.data))); i++ {  //битовый сдвиг влево для создания числа (от 0 до 2^n-1) //Эта строка использует   для приведения длины массива к целому числу без знака и выполнения побитовых операций в цикле.
+		subarray := make([]string, 0) //создание текущего среза строк для текущего подмассива
+		for j, elem := range arr.data { //перебор элементов массива вместе с их индексами
 			if (i & (1<<int(j))) != 0 {
-				subarray = append(subarray, elem)
+				subarray = append(subarray, elem) //добавление текущего подмассива в общий список подмассивов
 			}
 		}
 		subarrays = append(subarrays, subarray)
@@ -119,3 +123,7 @@ func main() {
 		fmt.Printf("%v", subarray)
 }
 }
+
+//не конкретные удовлетворяющие индексы а подмассив
+
+//проверка 

@@ -1,4 +1,5 @@
 //Обратная польская запись (вариант 2)
+
 package main
 
 import (
@@ -44,23 +45,23 @@ func (s *Stack) IsEmpty() bool {
 // evaluateRPN выполняет вычисление выражения в обратной польской записи
 func evaluateRPN(expression string) (int, error) {
 	stack := Stack{} //создание пустого стека
-	tokens := splitString(expression, " ") //разбиение входной строки на токены (части выражения) с помощью функции splitString
-	//перебор токенов из входного выражения     Если токен является оператором, то программа извлекает два операнда из стека, выполняет операцию и результат снова помещает в стек. Если токен не является оператором, он просто помещается в стек.
+	tokens := splitString(expression, " ") //разбиение входной строки на элементы (части выражения) с помощью функции splitString
+	//перебор токенов из входного выражения     Если  является оператором, то программа извлекает два операнда из стека, выполняет операцию и результат снова помещает в стек. Если токен не является оператором, он просто помещается в стек.
 	for _, token := range tokens {
-		if isOperator(token) {
-			if stack.IsEmpty() {
+		if isOperator(token) { //проверка является ли подстрока token оператором
+			if stack.IsEmpty() { //проверка на пустоту стека
 				return 0, errors.New("Invalid RPN expression")
 			}
 
-			operand2, err := sPopInt(&stack)
+			operand2, err := sPopInt(&stack) //извлечение второго операнда из стека
 			if err != nil {
 				return 0, err
 			}
-			operand1, err := sPopInt(&stack)
+			operand1, err := sPopInt(&stack) //извлечение первого операнда из стека
 			if err != nil {
 				return 0, err
 			}
-
+			//выполнение операции в зависимости от оператора
 			result := performOperation(token, operand1, operand2)
 			stack.SPush(fmt.Sprintf("%d", result))
 		} else {
@@ -68,11 +69,11 @@ func evaluateRPN(expression string) (int, error) {
 		}
 	}
 
-	//
+	//Проверка, что после обработки всех tokens стек не пуст
 	if stack.IsEmpty() {
 		return 0, errors.New("Invalid RPN expression")
 	}
-	//извлечение результата из стека и преобразования в целое число
+	//извлечение конечного результата из стека и преобразования в целое число
 	result, err := sPopInt(&stack)
 	if err != nil {
 		return 0, err
@@ -151,3 +152,9 @@ func main() {
 		fmt.Println("Result:", result)
 	}
 }
+
+//проверка на правильность написания (на дурака) есть лишняя цифра или оператор, чтоб какую-то ошибку выводил
+//приоритет умножения
+//обработка скобок
+//пример 5+2 
+//лишнее число
